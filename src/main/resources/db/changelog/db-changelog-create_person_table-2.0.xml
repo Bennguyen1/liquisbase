@@ -1,0 +1,15 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="2" author="dlienko">
+        <sql>
+            INSERT INTO location ( name, company_contacts) VALUES
+            ( 'AHMED AL NAJAR OFFICE1', '{"phoneNumbers": [{"name": "AHMED HUSSEIN ALI1", "phoneNumber": "7902458812"}], "emails": []}'),
+            ( 'AHMED AL NAJAR OFFICE2', '{"phoneNumbers": [{"name": "AHMED HUSSEIN ALI2", "phoneNumber": "79024588133"}], "emails": []}'),
+            ( 'AHMED AL NAJAR OFFICE3', '{"phoneNumbers": [{"name": "AHMED HUSSEIN ALI3", "phoneNumber": "79024588144"}], "emails": []}');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
