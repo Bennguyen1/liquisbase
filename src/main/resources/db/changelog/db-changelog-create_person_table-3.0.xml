@@ -4,32 +4,22 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
     <changeSet id="2" author="dlienko">
-<!--        <sql>-->
-<!--            UPDATE location-->
-<!--&#45;&#45;             SET company_contacts = '+964' + company_contacts-->
-
-
-<!--            jsonb_set(company_contacts, '{phoneNumbers,1,phoneNumber}', '"1234567890"')-->
-<!--            WHERE company_contacts->'phoneNumbers' @> '[{"phoneNumber":"7709198181"}]';-->
-
-
-<!--            WHERE (company_contacts like '0%' or '7%') or !(company_contacts like '+9%') ;-->
-
-<!--        </sql>-->
                 <sql>
-                    <![CDATA[
                     UPDATE location
-                    SET company_contacts = jsonb_set(company_contacts, '{phoneNumbers}', (
-                      SELECT jsonb_agg(
-                        CASE WHEN elem->>'phoneNumber' LIKE '7%'
-                          THEN jsonb_set(elem, '{phoneNumber}', CONCAT('+84', elem->>'phoneNumber'))
-                          ELSE elem
-                        END
-                      )
-                      FROM jsonb_array_elements(company_contacts->'phoneNumbers') AS elem
-                    ))
-                    WHERE company_contacts->'phoneNumbers' @> '[{"phoneNumber": "7%"}]';
-                ]]>
+                    SET company_contacts = jsonb_set(
+                            company_contacts,
+                            '{phoneNumbers}',
+                            (
+                                SELECT jsonb_agg(
+                                               jsonb_build_object(
+                                                       'name', p ->> 'name',
+                                                       'phoneNumber', CONCAT('+84', SUBSTRING(p ->> 'phoneNumber', 1))
+                                                   )
+                                           )
+                                FROM jsonb_array_elements(company_contacts -> 'phoneNumbers') AS p
+                                WHERE p ->> 'phoneNumber' LIKE '7%'
+                        )
+    );
                 </sql>
     </changeSet>
 
